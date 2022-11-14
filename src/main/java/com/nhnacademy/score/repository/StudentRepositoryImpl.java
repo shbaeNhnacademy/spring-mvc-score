@@ -6,7 +6,6 @@ import com.nhnacademy.score.exception.StudentAlreadyExistsException;
 import com.nhnacademy.score.exception.StudentNotFoundException;
 
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -33,7 +32,7 @@ public class StudentRepositoryImpl implements StudentRepository {
             throw new StudentAlreadyExistsException();
         }
 
-        Student student = new Student(id, name, email, score, comment);
+        Student student = Student.create(id, name, email, score, comment);
         studentMap.put(id, student);
         return student;
     }

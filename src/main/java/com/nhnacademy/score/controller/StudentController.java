@@ -14,7 +14,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Objects;
 
 @Slf4j
 @Controller
@@ -47,7 +46,6 @@ public class StudentController {
         return "studentView";
     }
 
-    //TODO #2 studentController 작성
     @GetMapping("/{studentId}/modify")
     public String studentModifyForm(@ModelAttribute Student student, Model model) {
         model.addAttribute(student);

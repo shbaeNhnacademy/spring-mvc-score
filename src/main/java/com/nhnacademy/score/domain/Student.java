@@ -2,8 +2,6 @@ package com.nhnacademy.score.domain;
 
 import lombok.Getter;
 
-import javax.validation.constraints.*;
-
 public class Student {
     @Getter
     private final Long id;

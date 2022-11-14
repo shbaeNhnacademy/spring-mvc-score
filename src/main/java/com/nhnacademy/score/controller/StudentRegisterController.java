@@ -35,7 +35,6 @@ public class StudentRegisterController {
         Student register = studentRepository.register(
                 studentRegisterRequest.getName(), studentRegisterRequest.getEmail(), studentRegisterRequest.getScore(), studentRegisterRequest.getComment());
         mav.addObject("student", register);
-        System.out.println("register = " + register);
         return mav;
     }
 

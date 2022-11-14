@@ -22,7 +22,7 @@ public class StudentRepositoryImpl implements StudentRepository {
     public Student register(String name, String email, int score, String comment) {
         Long id = studentMap.keySet()
                 .stream()
-                .max(Comparator.comparing(Function.identity()))
+                .max(Comparator.comparing(Function.identity())) //l->l
                 .map(l -> l + 1)
                 .orElse(1L);
 

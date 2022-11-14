@@ -10,4 +10,6 @@ public interface StudentRepository {
 
     Student getStudent(long id);
 
+    Student modifyStudent(long id, String name, String email, int score, String comment);
+
 }

@@ -1,11 +1,12 @@
 package com.nhnacademy.score.controller;
 
 import com.nhnacademy.score.domain.Student;
-import com.nhnacademy.score.domain.StudentRegisterRequest;
 import com.nhnacademy.score.domain.StudentModifyRequest;
 import com.nhnacademy.score.exception.StudentNotFoundException;
 import com.nhnacademy.score.exception.ValidationFailedException;
 import com.nhnacademy.score.repository.StudentRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
+@Slf4j
 @Controller
 @RequestMapping("/student")
 public class StudentController {
@@ -26,15 +28,22 @@ public class StudentController {
 
     @ModelAttribute("student")
     public Student getStudent(@PathVariable("studentId") Long studentId){
-        Student student = studentRepository.getStudent(studentId);
-        if (Objects.isNull(student)) {
+        if (!studentRepository.exists(studentId)) {
             throw new StudentNotFoundException(studentId);
         }
+        Student student = studentRepository.getStudent(studentId);
         return student;
     }
 
     @GetMapping("/{studentId}")
     public String viewStudent() {
+        return "studentView";
+    }
+
+    @GetMapping(path = "/{studentId}",params = {"hideScore=yes"})
+    public String viewStudentWithoutScoreAndComment(@ModelAttribute Student student, Model model) {
+        model.addAttribute("student",
+                new Student(student.getId(), student.getName(), student.getEmail(), -1, ""));
         return "studentView";
     }
 
@@ -46,7 +55,7 @@ public class StudentController {
     }
 
     @PostMapping("/{studentId}/modify")
-    public String modifyUser(@ModelAttribute Student student,
+    public String modifyStudent(@ModelAttribute Student student,
                              @Validated @ModelAttribute StudentModifyRequest postStudent,
                              BindingResult bindingResult,
                              ModelMap modelMap) {
@@ -54,10 +63,18 @@ public class StudentController {
             throw new ValidationFailedException(bindingResult);
         }
 
+        Long id = student.getId();
+        Student modifyStudent = studentRepository.modifyStudent(
+                id,postStudent.getName(),postStudent.getEmail(),postStudent.getScore(),postStudent.getComment());
 
-        System.out.println("student = " + student);
-        System.out.println("postStudent = " + postStudent);
+        modelMap.put("student", modifyStudent);
         return "studentView";
     }
+
+    @ExceptionHandler(StudentNotFoundException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND,reason = "Student Not Found")
+    public void handleStudentNotFoundException() {
+    }
+
 
 }

@@ -3,7 +3,6 @@ package com.nhnacademy.score.repository;
 
 import com.nhnacademy.score.domain.Student;
 import com.nhnacademy.score.exception.StudentAlreadyExistsException;
-import com.nhnacademy.score.exception.StudentNotFoundException;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -27,7 +26,6 @@ public class StudentRepositoryImpl implements StudentRepository {
                 .map(l -> l + 1)
                 .orElse(1L);
 
-        //TODO #4 이거 해야하나?
         if (exists(id)) {
             throw new StudentAlreadyExistsException();
         }
@@ -39,9 +37,13 @@ public class StudentRepositoryImpl implements StudentRepository {
 
     @Override
     public Student getStudent(long id) {
-        if (!exists(id)) {
-            throw new StudentNotFoundException(id);
-        }
         return studentMap.get(id);
+    }
+
+    @Override
+    public Student modifyStudent(long id, String name, String email, int score, String comment) {
+        Student newStudent = Student.create(id, name, email, score, comment);
+        studentMap.put(id, newStudent);
+        return newStudent;
     }
 }

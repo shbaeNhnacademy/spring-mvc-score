@@ -1,11 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<head>
+<head>/student/register
     <meta charset="UTF-8" />
     <title>학생 정보 등록</title>
 </head>
 <body>
-    <form method="post" action="/student/register">
+    <form method="post" action="">
         이름: <input type="text" name="name" /><br />
         이메일: <input type="text" name="email" /><br />
         성적: <input type="text" name="score" /><br />

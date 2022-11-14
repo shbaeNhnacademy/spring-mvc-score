@@ -1,7 +1,8 @@
 package com.nhnacademy.score;
 
-import com.nhnacademy.springmvc.config.RootConfig;
-import com.nhnacademy.springmvc.config.WebConfig;
+
+import com.nhnacademy.score.config.RootConfig;
+import com.nhnacademy.score.config.WebConfig;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 

@@ -36,20 +36,20 @@ public class StudentController {
 
     @GetMapping("/{studentId}")
     public String viewStudent() {
-        return "studentView";
+        return "thymeleaf/studentView";
     }
 
     @GetMapping(path = "/{studentId}",params = {"hideScore=yes"})
     public String viewStudentWithoutScoreAndComment(@ModelAttribute Student student, Model model) {
         model.addAttribute("student",
                 new Student(student.getId(), student.getName(), student.getEmail(), -1, ""));
-        return "studentView";
+        return "thymeleaf/studentView";
     }
 
     @GetMapping("/{studentId}/modify")
     public String studentModifyForm(@ModelAttribute Student student, Model model) {
         model.addAttribute(student);
-        return "studentModify";
+        return "thymeleaf/studentModify";
     }
 
     @PostMapping("/{studentId}/modify")
@@ -66,12 +66,16 @@ public class StudentController {
                 id,postStudent.getName(),postStudent.getEmail(),postStudent.getScore(),postStudent.getComment());
 
         modelMap.put("student", modifyStudent);
-        return "studentView";
+        return "thymeleaf/studentView";
     }
 
     @ExceptionHandler(StudentNotFoundException.class)
-    @ResponseStatus(value = HttpStatus.NOT_FOUND,reason = "Student Not Found")
-    public void handleStudentNotFoundException() {
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public String handleStudentNotFoundException(StudentNotFoundException ex, Model model) {
+        log.info("", ex);
+
+        model.addAttribute("exception", ex);
+        return "thymeleaf/error";
     }
 
 

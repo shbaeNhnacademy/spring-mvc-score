@@ -14,14 +14,14 @@ public class WebControllerAdvice {
         log.info("", ex);
 
         model.addAttribute("exception", ex);
-        return "error";
+        return "thymeleaf/error";
     }
     @ExceptionHandler(Exception.class)
     public String handleException(Exception ex, Model model) {
         log.error("", ex);
 
         model.addAttribute("exception", ex);
-        return "error";
+        return "thymeleaf/error";
     }
 
 }

@@ -1,0 +1,21 @@
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>index</title>
+</head>
+<body>
+    <h2><span th:text="#{score}" ></span></h2>
+
+    <hr/>
+
+    <a href="?locale=ko">
+        <span th:if="${#locale.toString() == 'ko'}"><b>ko</b></span>
+        <span th:if="${#locale.toString() != 'ko'}">ko</span>
+    </a>
+    <br />
+    <a href="?locale=en">
+        <span th:if="${#locale.toString() == 'en'}"><b>en</b></span>
+        <span th:if="${#locale.toString() != 'en'}">en</span>
+    </a><br />
+</body>
+</html>

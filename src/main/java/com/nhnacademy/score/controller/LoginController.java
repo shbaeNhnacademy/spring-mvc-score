@@ -14,6 +14,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Objects;
 
 @Slf4j
 @Controller
@@ -21,14 +22,15 @@ public class LoginController {
     private static String admin = "admin";
     private static String password = "12345";
     @GetMapping("/login")
-    public String login(@CookieValue(value = "SESSION", required = false) String session,
+    public String login( HttpServletRequest request,
                         Model model) {
-        if (StringUtils.hasText(session)) {
-            model.addAttribute("login",admin);
-            return "thymeleaf/loginSuccess";
-        } else {
-            return "thymeleaf/loginForm";
+        HttpSession session = request.getSession(false);
+        if (!Objects.isNull(session)){
+            if (!Objects.isNull(session.getAttribute("login"))) {
+                return "thymeleaf/loginSuccess";
+            }
         }
+        return "thymeleaf/loginForm";
     }
 
     @PostMapping("/login")

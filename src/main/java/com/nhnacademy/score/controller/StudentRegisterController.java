@@ -4,6 +4,7 @@ import com.nhnacademy.score.domain.Student;
 import com.nhnacademy.score.domain.StudentRegisterRequest;
 import com.nhnacademy.score.exception.ValidationFailedException;
 import com.nhnacademy.score.repository.StudentRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -26,8 +27,9 @@ public class StudentRegisterController {
     }
 
     @PostMapping
-    public ModelAndView registerStudent(@Validated @ModelAttribute StudentRegisterRequest studentRegisterRequest,
-                                        BindingResult bindingResult) {
+    @ResponseBody
+    public ResponseEntity<Student> registerStudent(@Validated @ModelAttribute StudentRegisterRequest studentRegisterRequest,
+                                          BindingResult bindingResult) {
         if(bindingResult.hasErrors()){
             throw new ValidationFailedException(bindingResult);
         }
@@ -35,7 +37,7 @@ public class StudentRegisterController {
         Student register = studentRepository.register(
                 studentRegisterRequest.getName(), studentRegisterRequest.getEmail(), studentRegisterRequest.getScore(), studentRegisterRequest.getComment());
         mav.addObject("student", register);
-        return mav;
+        return ResponseEntity.ok(register);
     }
 
 }

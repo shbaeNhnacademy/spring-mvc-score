@@ -10,6 +10,6 @@
     <span th:text="#{score}" ></span>: <span th:text="${student.score}"></span><br />
     <span th:text="#{comment}" ></span>: <span th:text="${student.comment}"></span><br />
     <br />
-    <a href="/student/${student.id.toString()}/modify"><span th:text="#{modify_info}" ></span></a><br />
+    <a th:href="@{/student/{id}/modify(id=student.id)}"><span th:text="#{modify_info}" ></span></a><br />
 </body>
 </html>

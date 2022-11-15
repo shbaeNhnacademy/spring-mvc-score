@@ -1,6 +1,7 @@
 package com.nhnacademy.score.config;
 
 import com.nhnacademy.score.controller.ControllerBase;
+import com.nhnacademy.score.interceptor.LoginCheckInterceptor;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -47,6 +48,7 @@ public class WebConfig implements WebMvcConfigurer, ApplicationContextAware, Mes
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LocaleChangeInterceptor());
+        registry.addInterceptor(new LoginCheckInterceptor()).excludePathPatterns("/", "/login");
     }
 
     @Override

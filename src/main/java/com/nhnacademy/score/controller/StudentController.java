@@ -19,13 +19,15 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/student")
 public class StudentController {
+    private static final String STUDENT = "student";
+    private static final String THYMELEAF_STUDENT_VIEW = "thymeleaf/studentView";
     private final StudentRepository studentRepository;
 
     public StudentController(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
 
-    @ModelAttribute("student")
+    @ModelAttribute(STUDENT)
     public Student getStudent(@PathVariable("studentId") Long studentId){
         if (!studentRepository.exists(studentId)) {
             throw new StudentNotFoundException(studentId);
@@ -36,14 +38,14 @@ public class StudentController {
 
     @GetMapping("/{studentId}")
     public String viewStudent() {
-        return "thymeleaf/studentView";
+        return THYMELEAF_STUDENT_VIEW;
     }
 
     @GetMapping(path = "/{studentId}",params = {"hideScore=yes"})
     public String viewStudentWithoutScoreAndComment(@ModelAttribute Student student, Model model) {
-        model.addAttribute("student",
+        model.addAttribute(STUDENT,
                 new Student(student.getId(), student.getName(), student.getEmail(), -1, ""));
-        return "thymeleaf/studentView";
+        return THYMELEAF_STUDENT_VIEW;
     }
 
     @GetMapping("/{studentId}/modify")
@@ -65,8 +67,8 @@ public class StudentController {
         Student modifyStudent = studentRepository.modifyStudent(
                 id,postStudent.getName(),postStudent.getEmail(),postStudent.getScore(),postStudent.getComment());
 
-        modelMap.put("student", modifyStudent);
-        return "thymeleaf/studentView";
+        modelMap.put(STUDENT, modifyStudent);
+        return THYMELEAF_STUDENT_VIEW;
     }
 
     @ExceptionHandler(StudentNotFoundException.class)

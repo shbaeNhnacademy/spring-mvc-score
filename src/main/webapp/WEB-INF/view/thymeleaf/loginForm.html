@@ -8,7 +8,9 @@
         <span th:text="#{id}" ></span>: <input type="text" name="id" /><br />
         <span th:text="#{pwd}" ></span>: <input type="password" name="pwd" /><br />
         <br />
-        <input type="submit" />
+        <input th:value="#{submit}" type="submit" />
     </form>
+    <br/><br/>
+    <a href="/" th:text="#{main}"></a>
 </body>
 </html>

@@ -1,17 +1,19 @@
 <html>
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <title>학생 정보 수정</title>
 </head>
 <body>
-<form method="post" th:action="@{/student/{id}/modify(id=student.id)}">
-    <span th:text="#{name}" ></span>:  <input type="text" name="name"  th:value="${student.name}" /><br />
-    <span th:text="#{email}" ></span>: <input type="text" name="email" th:value="${student.email}" /><br />
-    <span th:text="#{score}" ></span>: <input type="text" name="score" th:value="${student.score}" /><br />
-    <span th:text="#{comment}" ></span>: <textarea name="comment" rows="10" cols="80" th:value="${student.comment}" ></textarea><br />
-    <br />
-    <input type="submit" />
-</form>
-
+    <form method="post" th:action="@{/student/{id}/modify(id=student.id)}">
+        <span th:text="#{name}"></span>: <input type="text" name="name" th:value="${student.name}"/><br/>
+        <span th:text="#{email}"></span>: <input type="text" name="email" th:value="${student.email}"/><br/>
+        <span th:text="#{score}"></span>: <input type="text" name="score" th:value="${student.score}"/><br/>
+        <span th:text="#{comment}"></span>: <textarea name="comment" rows="10" cols="80"
+                                                      th:value="${student.comment}"></textarea><br/>
+        <br/>
+        <input th:value="#{submit}" type="submit"/>
+    </form>
+    <br/><br/>
+<!--    <a th:href="@{/student/{id}(id=student.id)}" th:text="#{student_info}"></a>-->
 </body>
 </html>

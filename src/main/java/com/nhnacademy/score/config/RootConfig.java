@@ -29,7 +29,6 @@ public class RootConfig {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setBasename("message");
-//        messageSource.setBasenames("message", "error");
 
         return messageSource;
     }

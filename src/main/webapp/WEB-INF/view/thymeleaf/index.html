@@ -7,7 +7,12 @@
     <h2><span th:text="#{score}" ></span></h2>
 
     <hr/>
-
+    <br/><br/>
+    <span th:if="${#session != null}"> <a href="/logout" th:text="#{logout}"></a></span>
+    <span th:if="${#session == null}"> <a href="/login" th:text="#{login}"></a></span>
+    <br/><br/>
+    <a href="/student/register" th:text="#{student_register}"></a>
+    <br/><br/>
     <a href="?locale=ko">
         <span th:if="${#locale.toString() == 'ko'}"><b>ko</b></span>
         <span th:if="${#locale.toString() != 'ko'}">ko</span>

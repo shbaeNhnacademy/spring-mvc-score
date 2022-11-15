@@ -24,7 +24,7 @@ public class LoginController {
     public String login(@CookieValue(value = "SESSION", required = false) String session,
                         Model model) {
         if (StringUtils.hasText(session)) {
-            model.addAttribute("id",admin);
+            model.addAttribute("login",admin);
             return "thymeleaf/loginSuccess";
         } else {
             return "thymeleaf/loginForm";

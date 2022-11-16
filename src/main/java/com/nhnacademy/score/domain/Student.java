@@ -10,11 +10,11 @@ public class Student {
     @Getter
     private final String email;
     @Getter
-    private final int score;
+    private final Integer score;
     @Getter
     private final String comment;
 
-    public Student(Long id, String name, String email, int score, String comment) {
+    public Student(Long id, String name, String email, Integer score, String comment) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -22,7 +22,7 @@ public class Student {
         this.comment = comment;
     }
 
-    public static Student create(Long id, String name, String email, int score, String comment) {
+    public static Student create(Long id, String name, String email, Integer score, String comment) {
         return new Student(id, name, email, score, comment);
     }
 

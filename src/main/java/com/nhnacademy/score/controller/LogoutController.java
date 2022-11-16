@@ -22,17 +22,16 @@ public class LogoutController {
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request,
-                         HttpServletResponse response,
-                        Model model) {
+                         HttpServletResponse response) {
         HttpSession session = request.getSession(false);
 
         if (!Objects.isNull(session)) {
             session.setAttribute("login", "");
             session.invalidate();
 
-        Cookie cookie = new Cookie("SESSION", null);
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
+            Cookie cookie = new Cookie("SESSION", null);
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
         }
         return "redirect:/login";
     }

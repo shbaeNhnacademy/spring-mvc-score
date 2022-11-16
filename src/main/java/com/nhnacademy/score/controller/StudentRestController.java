@@ -7,7 +7,7 @@ import com.nhnacademy.score.exception.ValidationFailedException;
 import com.nhnacademy.score.repository.StudentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -16,14 +16,13 @@ import org.springframework.web.bind.annotation.*;
 
 
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/student")
-public class StudentController {
+public class StudentRestController {
     private static final String STUDENT = "student";
-    private static final String THYMELEAF_STUDENT_VIEW = "thymeleaf/studentView";
     private final StudentRepository studentRepository;
 
-    public StudentController(StudentRepository studentRepository) {
+    public StudentRestController(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
 
@@ -32,25 +31,17 @@ public class StudentController {
         if (!studentRepository.exists(studentId)) {
             throw new StudentNotFoundException(studentId);
         }
-        Student student = studentRepository.getStudent(studentId);
-        return student;
+        return studentRepository.getStudent(studentId);
     }
 
-    @GetMapping(path = "/{studentId}",params = {"hideScore=yes"})
-    public String viewStudentWithoutScoreAndComment(@ModelAttribute Student student, Model model) {
-        model.addAttribute(STUDENT,
-                new Student(student.getId(), student.getName(), student.getEmail(), -1, ""));
-        return THYMELEAF_STUDENT_VIEW;
+    @GetMapping("/{studentId}")
+    public ResponseEntity<Student> viewStudent(@ModelAttribute Student student) {
+        return ResponseEntity.ok(student);
     }
 
-    @GetMapping("/{studentId}/modify")
-    public String studentModifyForm(@ModelAttribute Student student, Model model) {
-        model.addAttribute(student);
-        return "thymeleaf/studentModify";
-    }
 
-    @PostMapping("/{studentId}/modify")
-    public String modifyStudent(@ModelAttribute Student student,
+    @PutMapping("/{studentId}/modify")
+    public ResponseEntity<Student> modifyStudent(@ModelAttribute Student student,
                              @Validated @ModelAttribute StudentModifyRequest postStudent,
                              BindingResult bindingResult,
                              ModelMap modelMap) {
@@ -61,9 +52,7 @@ public class StudentController {
         Long id = student.getId();
         Student modifyStudent = studentRepository.modifyStudent(
                 id,postStudent.getName(),postStudent.getEmail(),postStudent.getScore(),postStudent.getComment());
-
-        modelMap.put(STUDENT, modifyStudent);
-        return THYMELEAF_STUDENT_VIEW;
+        return ResponseEntity.ok(modifyStudent);
     }
 
     @ExceptionHandler(StudentNotFoundException.class)

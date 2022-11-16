@@ -34,7 +34,7 @@ public class LogoutController {
         cookie.setMaxAge(0);
         response.addCookie(cookie);
         }
-        return "redirect:login";
+        return "redirect:/login";
     }
 
 }

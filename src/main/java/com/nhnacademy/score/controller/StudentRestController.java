@@ -9,8 +9,6 @@ import com.nhnacademy.score.repository.StudentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,35 +18,33 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/students")
 public class StudentRestController {
-    private static final String STUDENT = "student";
     private final StudentRepository studentRepository;
 
     public StudentRestController(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
 
-    @ModelAttribute(STUDENT)
-    public Student getStudent(@PathVariable("studentId") Long studentId){
+    @GetMapping("/{studentId}")
+    public ResponseEntity<Student> viewStudent(@PathVariable(value = "studentId") Long studentId) {
         if (!studentRepository.exists(studentId)) {
             throw new StudentNotFoundException(studentId);
         }
-        return studentRepository.getStudent(studentId);
-    }
-
-    @GetMapping("/{studentId}")
-    public ResponseEntity<Student> viewStudent(@ModelAttribute Student student) {
-        return ResponseEntity.ok(student);
+        return ResponseEntity.ok(studentRepository.getStudent(studentId));
     }
 
 
     @PutMapping("/{studentId}")
-    public ResponseEntity<Student> modifyStudent(@ModelAttribute Student student,
-                             @Validated @ModelAttribute StudentModifyRequest postStudent,
-                             BindingResult bindingResult,
-                             ModelMap modelMap) {
+    public ResponseEntity<Student> modifyStudent(@PathVariable(value = "studentId") Long studentId,
+                             @Validated @RequestBody StudentModifyRequest postStudent,
+                             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new ValidationFailedException(bindingResult);
         }
+
+        if (!studentRepository.exists(studentId)) {
+            throw new StudentNotFoundException(studentId);
+        }
+        Student student = studentRepository.getStudent(studentId);
 
         Long id = student.getId();
         Student modifyStudent = studentRepository.modifyStudent(
@@ -56,17 +52,8 @@ public class StudentRestController {
         return ResponseEntity.ok(modifyStudent);
     }
 
-    @ExceptionHandler(StudentNotFoundException.class)
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public String handleStudentNotFoundException(StudentNotFoundException ex, Model model) {
-        log.info("", ex);
-
-        model.addAttribute("exception", ex);
-        return "thymeleaf/error";
-    }
-
     @PostMapping
-    public ResponseEntity<Student> registerStudent(@Validated @ModelAttribute StudentRegisterRequest studentRegisterRequest,
+    public ResponseEntity<Student> registerStudent(@Validated @RequestBody StudentRegisterRequest studentRegisterRequest,
                                                    BindingResult bindingResult) {
         if(bindingResult.hasErrors()){
             throw new ValidationFailedException(bindingResult);
@@ -75,5 +62,17 @@ public class StudentRestController {
                 studentRegisterRequest.getName(), studentRegisterRequest.getEmail(), studentRegisterRequest.getScore(), studentRegisterRequest.getComment());
         return ResponseEntity.ok(register);
     }
+
+    @ExceptionHandler(StudentNotFoundException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public ResponseEntity<String> handleStudentNotFoundException(StudentNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(ValidationFailedException.class)
+    public ResponseEntity<String> handleValidationFailedException(ValidationFailedException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
 
 }

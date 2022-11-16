@@ -2,6 +2,7 @@ package com.nhnacademy.score.controller;
 
 import com.nhnacademy.score.domain.Student;
 import com.nhnacademy.score.domain.StudentModifyRequest;
+import com.nhnacademy.score.domain.StudentRegisterRequest;
 import com.nhnacademy.score.exception.StudentNotFoundException;
 import com.nhnacademy.score.exception.ValidationFailedException;
 import com.nhnacademy.score.repository.StudentRepository;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/student")
+@RequestMapping("/students")
 public class StudentRestController {
     private static final String STUDENT = "student";
     private final StudentRepository studentRepository;
@@ -40,7 +41,7 @@ public class StudentRestController {
     }
 
 
-    @PutMapping("/{studentId}/modify")
+    @PutMapping("/{studentId}")
     public ResponseEntity<Student> modifyStudent(@ModelAttribute Student student,
                              @Validated @ModelAttribute StudentModifyRequest postStudent,
                              BindingResult bindingResult,
@@ -64,5 +65,15 @@ public class StudentRestController {
         return "thymeleaf/error";
     }
 
+    @PostMapping
+    public ResponseEntity<Student> registerStudent(@Validated @ModelAttribute StudentRegisterRequest studentRegisterRequest,
+                                                   BindingResult bindingResult) {
+        if(bindingResult.hasErrors()){
+            throw new ValidationFailedException(bindingResult);
+        }
+        Student register = studentRepository.register(
+                studentRegisterRequest.getName(), studentRegisterRequest.getEmail(), studentRegisterRequest.getScore(), studentRegisterRequest.getComment());
+        return ResponseEntity.ok(register);
+    }
 
 }

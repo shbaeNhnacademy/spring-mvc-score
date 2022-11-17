@@ -37,8 +37,9 @@ public class StudentRestController {
 
     @PutMapping("/{studentId}")
     public ResponseEntity<Student> modifyStudent(@PathVariable(value = "studentId") Long studentId,
-                             @Validated @RequestBody StudentModifyRequest postStudent,
+                             @Validated @RequestBody StudentModifyRequest studentModifyRequest,
                              BindingResult bindingResult) {
+
         if (bindingResult.hasErrors()) {
             throw new ValidationFailedException(bindingResult);
         }
@@ -50,7 +51,7 @@ public class StudentRestController {
 
         Long id = student.getId();
         Student modifyStudent = studentRepository.modifyStudent(
-                id,postStudent.getName(),postStudent.getEmail(),postStudent.getScore(),postStudent.getComment());
+                id, studentModifyRequest.getName(), studentModifyRequest.getEmail(), studentModifyRequest.getScore(), studentModifyRequest.getComment());
         return ResponseEntity.ok(modifyStudent);
     }
 

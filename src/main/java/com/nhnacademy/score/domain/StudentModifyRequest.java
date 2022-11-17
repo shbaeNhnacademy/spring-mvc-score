@@ -5,6 +5,8 @@ import lombok.*;
 import javax.validation.constraints.*;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class StudentModifyRequest {
     @NotBlank
     private String name;

@@ -13,6 +13,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+
 
 @Slf4j
 @RestController
@@ -60,7 +62,7 @@ public class StudentRestController {
         }
         Student register = studentRepository.register(
                 studentRegisterRequest.getName(), studentRegisterRequest.getEmail(), studentRegisterRequest.getScore(), studentRegisterRequest.getComment());
-        return ResponseEntity.ok(register);
+        return ResponseEntity.created(URI.create("/students/"+register.getId())).build();
     }
 
     @ExceptionHandler(StudentNotFoundException.class)

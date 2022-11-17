@@ -36,6 +36,11 @@ public class StudentController {
         return student;
     }
 
+    @GetMapping(path = "/{studentId}")
+    public String viewStudent() {
+        return THYMELEAF_STUDENT_VIEW;
+    }
+
     @GetMapping(path = "/{studentId}",params = {"hideScore=yes"})
     public String viewStudentWithoutScoreAndComment(@ModelAttribute Student student, Model model) {
         model.addAttribute(STUDENT,

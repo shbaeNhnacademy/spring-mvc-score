@@ -13,7 +13,7 @@ class StudentRegisterControllerTest {
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(new StudentRegisterController()).build();
+//        mockMvc = MockMvcBuilders.standaloneSetup(new StudentRegisterController()).build();
     }
 
     @Test
